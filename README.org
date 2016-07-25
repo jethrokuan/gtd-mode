@@ -1,0 +1,15 @@
+* gtd-mode
+
+=gtd-mode= is a minor mode which implements the Getting Things Done workflow. Specifically, =gtd-mode= guides you along the steps of processing your "in"-tray.
+
+* Usage
+** gtd-into-inbox
+This command essentially calls =org-capture=, and files a new item in your inbox:
+
+#+CAPTION: gtd-into-inbox
+[[./screenshots/gtd-into-inbox.gif]]
+
+* License
+GNU General Public License
+
+
