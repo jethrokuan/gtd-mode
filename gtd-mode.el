@@ -34,8 +34,12 @@
   :lighter " gtd"
   :global t)
 
-(defvar gtd-folder "~/.org/gtd"
-  "Folder that contains all GTD-related files")
+(defgroup gtd nil
+  "Provides an Emacs implementation of the GTD workflow."
+  :group 'extensions)
+
+(defcustom gtd-folder "~/.org/gtd"
+  "Folder that contains all GTD-related files. Defaults to \"~/.org/gtd\".")
 
 (defvar gtd-actionable-options
   '((?p "(p) Project" gtd-refile-to-project) 
@@ -59,7 +63,7 @@
 (setq gtd-someday-file (concat (file-name-as-directory gtd-folder) "someday.org"))
 
 (add-to-list 'org-capture-templates '("i" "Inbox" entry (file gtd-inbox-file)
-                                      "* %? %i\n"))
+                                      "* %?%i\n"))
 
 ;;; Helpers
 (defun gtd-refile-to (file prompt)
