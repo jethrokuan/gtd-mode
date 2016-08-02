@@ -44,7 +44,8 @@
 (defvar gtd-actionable-options
   '((?p "(p) Project" gtd-refile-to-project) 
     (?d "(d) Delegate" gtd-delegate-item)
-    (?c "(c) Create Next-action" gtd-new-next-action)
+    (?n "(n) Create Next-action" gtd-new-next-action)
+    (?c "(c) Calendar" gtd-add-to-cal)
     (?\ "(SPC) DO NOW" gtd-do-now))
   "Options for actionables")
 
@@ -60,6 +61,7 @@
 (setq gtd-na-file (concat (file-name-as-directory gtd-folder) "next_actions.org"))
 (setq gtd-waiting-file (concat (file-name-as-directory gtd-folder) "waiting_for.org"))
 (setq gtd-reference-file (concat (file-name-as-directory gtd-folder) "reference.org"))
+(setq gtd-calendar-file (concat (file-name-as-directory gtd-folder) "calendar.org"))
 (setq gtd-someday-file (concat (file-name-as-directory gtd-folder) "someday.org"))
 
 (add-to-list 'org-capture-templates '("i" "Inbox" entry (file gtd-inbox-file)
@@ -107,6 +109,11 @@
       (insert item)
       (append-to-buffer (find-file-noselect gtd-na-file) (point-min) (point-max))))
   (kill-whole-line))
+
+(defun gtd-add-to-cal ()
+  (gtd-alter-headline "Enter Calendar item: ")
+  (org-schedule (org-element-at-point))
+  (gtd-refile-to gtd-calendar-file "Select Category: "))
 
 (defun gtd-do-now ()
   (let ((val (org-element-property :raw-value (org-element-at-point))))
