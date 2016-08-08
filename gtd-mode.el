@@ -134,7 +134,10 @@
 ;;; Main Functions
 (defun gtd-alter-headline (prompt)
   (let ((headline (read-string prompt (org-element-property :raw-value (org-element-at-point)))))
-    (org-element-put-property (org-element-at-point) :raw-value headline)))
+    (beginning-of-line)
+    (kill-line)
+    (insert (format "* %s" headline))
+    (beginning-of-line)))
 
 (defun gtd-select-options (options-var)
   (let ((options (mapconcat (lambda (x) (car (cdr x))) options-var " ")))
