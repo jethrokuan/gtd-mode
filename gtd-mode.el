@@ -28,6 +28,7 @@
 (require 'org)
 (require 'org-element)
 (require 'ivy)
+(require 'cl-lib)
 
 (define-minor-mode gtd-mode
   "GTD mode"
@@ -39,7 +40,8 @@
   :group 'extensions)
 
 (defcustom gtd-folder "~/.org/gtd"
-  "Folder that contains all GTD-related files. Defaults to \"~/.org/gtd\".")
+  "Folder that contains all GTD-related files. Defaults to \"~/.org/gtd\"."
+  :group 'gtd)
 
 (defvar gtd-actionable-options
   '((?p "(p) Project" gtd-refile-to-project) 
@@ -68,14 +70,18 @@
                                       "* %?%i\n"))
 
 ;;; Helpers
+(cl-defun gtd-select-headline-from-file (file prompt &optional (level 1))
+  "Uses ivy-read to list headlines from FILE at LEVEL, and returns the headline. LEVEL defaults to 1."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (ivy-read prompt
+              (org-element-map (org-element-parse-buffer 'headline) 'headline
+                (lambda (h) (when (equal (org-element-property :level h) level)
+                              (org-element-property :raw-value h)))))))
+
 (defun gtd-refile-to (file prompt)
   "Moves current org-element to new file"
-  (let ((headline (with-temp-buffer
-                    (insert-file-contents file)
-                    (ivy-read prompt
-                              (org-element-map (org-element-parse-buffer 'headline) 'headline
-                                (lambda (h) (when (equal (org-element-property :level h) 1)
-                                              (org-element-property :raw-value h))))))))
+  (let ((headline (gtd-select-headline-from-file file prompt)))
     (let ((pos (save-window-excursion
                  (find-file file)
                  (end-of-buffer)
