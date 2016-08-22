@@ -58,6 +58,7 @@
   "Options for nonactionables")
 
 ;;; Setup
+;; TODO: fix this. This doesn't work well with defcustom.
 (setq gtd-inbox-file (concat (file-name-as-directory gtd-folder) "inbox.org"))
 (setq gtd-projects-file (concat (file-name-as-directory gtd-folder) "projects.org"))
 (setq gtd-na-file (concat (file-name-as-directory gtd-folder) "next_actions.org"))
@@ -168,6 +169,6 @@
               (gtd-select-options gtd-actionable-options) 
             (gtd-select-options gtd-nonactionable-options))))
       (message "Inbox clear!"))
-    (save-current-buffer)))
+    (save-buffer)))
 
 (provide 'gtd-mode)
